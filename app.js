@@ -2,17 +2,40 @@ import express from 'express'
 import chalk from 'chalk'
 import morgan from 'morgan'
 import path from 'path'
+import sessions from './src/data/sessions.json' assert {type: 'json'};
 import createDebug  from 'debug'
 const debug = createDebug ('app')
 
+const PORT = process.env.PORT || 3000
 const app = express()
+const sessionRouter = express.Router()
+
 app.use(morgan('tiny'))
 app.use(express.static(path.join(path.resolve(), '/public/')))
 
+app.set('views', './src/views')
+app.set('view engine', 'ejs')
+
+
+sessionRouter.route('/').get((req,res) => {
+    res.render('sessions', {
+        sessions
+    })
+})
+sessionRouter.route('/1').get((req,res) => {
+    res.send('hello single sessions')
+})
+app.use('/sessions', sessionRouter)
+
 app.get('/', (req, res) => {
-    res.send('index empty page!')
+    res.render('index', {
+        title: 'Welcome to Globomantics',
+        data: [
+            'a', 'b', 'c'
+        ]
+    })
 })
 
-app.listen(3000, () => {
-    debug(`Server listening on port ${chalk.green(3000)} 🚀!`)
+app.listen(PORT, () => {
+    debug(`Server listening to port ${chalk.green(PORT)} 🚀!`)
 })
