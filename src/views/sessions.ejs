@@ -148,8 +148,8 @@
                 sessions.map((session) => {%>
                     <div class="col-xs-12 col-sm-4 col-md-4 adj_text">
                       <h3><%=session.title%></h3>
-                      <p><%=session.description%></p>
-                      <a href="#" class="btn-oval">Learn More</a>
+                      <p><%=session.description.slice(0, 200)%></p>
+                      <a href="/sessions/<%=session.id%>" class="btn-oval">Learn More</a>
                     </div>
                 <% })
             %>
