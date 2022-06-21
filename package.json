@@ -7,7 +7,7 @@
     "start": "nodemon --experimental-json-modules app.js",
     "debug": "npm run windowsDebug",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "windowsDebug": "@powershell -Command $env:DEBUG='app';nodemon --experimental-json-modules app.js"
+    "windowsDebug": "@powershell -Command $env:DEBUG='app,app:*';nodemon --experimental-json-modules app.js"
   },
   "repository": {
     "type": "git",
