@@ -1,5 +1,6 @@
 import express from 'express'
 import { MongoClient, ObjectId } from 'mongodb'
+import passport from 'passport'
 import createDebug  from 'debug'
 const debug = createDebug ('app:authRouter')
 
@@ -40,5 +41,13 @@ authRouter.route('/signUp').post((req,res) => {
 authRouter.route('/profile').get((req, res) => {
     res.json(req.user);
 })
+
+authRouter.route('/signIn').get((req,res) => {
+    res.render('signin')
+})
+.post(passport.authenticate('local', {
+    successRedirect: '/auth/profile',
+    failureRedirect: '/'
+}))
 
 export default authRouter

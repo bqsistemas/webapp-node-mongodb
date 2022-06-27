@@ -7,6 +7,13 @@ const url = 'mongodb://bqsistemas:barrantes@127.0.0.1:27017'
 const dbName = 'globomantics'
 
 const sessionRouter = express.Router()
+sessionRouter.use((req, res, next) => {
+    if(req.user){
+        next();
+    }else {
+        res.redirect('/auth/signIn')
+    }
+})
 
 sessionRouter.route('/').get((req,res) => {
     (async function mongo(){
