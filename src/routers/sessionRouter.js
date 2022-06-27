@@ -2,6 +2,7 @@ import express from 'express'
 import { MongoClient, ObjectId } from 'mongodb'
 import createDebug  from 'debug'
 const debug = createDebug ('app:sessionRouter')
+import speakersService from '../services/speakerService.js'
 
 const url = 'mongodb://bqsistemas:barrantes@127.0.0.1:27017'
 const dbName = 'globomantics'
@@ -47,6 +48,9 @@ sessionRouter.route('/:id').get((req,res) => {
 
             const session = await db.collection('sessions').findOne({ _id: ObjectId(id) })
             
+            const speaker = await speakersService.getSpeakerById(session.speakers[0].id)
+
+            session.speaker = speaker.data
             res.render('session', {
                 session
             })
