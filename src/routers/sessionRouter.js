@@ -23,6 +23,8 @@ sessionRouter.route('/').get((req,res) => {
             })
         }catch(error){
             debug(error.stack)
+        }finally{
+            client.close()
         }
     }())
 })
@@ -43,6 +45,8 @@ sessionRouter.route('/:id').get((req,res) => {
             })
         }catch(error){
             debug(error.stack)
+        }finally{
+            client.close()
         }
     }())
 })

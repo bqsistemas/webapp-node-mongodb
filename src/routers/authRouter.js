@@ -1,5 +1,5 @@
 import express from 'express'
-import { MongoClient } from 'mongodb'
+import { MongoClient, ObjectId } from 'mongodb'
 import createDebug  from 'debug'
 const debug = createDebug ('app:authRouter')
 
@@ -9,9 +9,7 @@ const dbName = 'globomantics'
 const authRouter = express.Router()
 
 authRouter.route('/signUp').post((req,res) => {
-    res.json(req.body)
-
-    (async function mongo(){
+    (async function addUser(){
         let client;
         try{
 
@@ -19,12 +17,28 @@ authRouter.route('/signUp').post((req,res) => {
             debug('Connected to the mongo DB')
 
             const db = client.db(dbName)
+            // await db.dropCollection('users')
+            const user = { username: req.body.username, password: req.body.password }
+            const userAdded = await db
+            .collection('users')
+            .insertOne(user)
 
-            res.json(response)
+            user._id = userAdded.insertedId
+            debug(user)
+
+            req.login(user, () => {
+                res.redirect('/auth/profile')
+            })
         }catch(error){
             debug(error.stack)
+        }finally{
+            client.close()
         }
     }())
+})
+
+authRouter.route('/profile').get((req, res) => {
+    res.json(req.user);
 })
 
 export default authRouter

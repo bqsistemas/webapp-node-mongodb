@@ -1,4 +1,6 @@
 import passport from 'passport'
+import localStrategy from './strategies/local.strategy.js'
+localStrategy()
 
 const passportConfig = (app) => {
     app.use(passport.initialize())
@@ -13,4 +15,4 @@ const passportConfig = (app) => {
     })
 }
 
-module.exports = passportConfig
+export default passportConfig

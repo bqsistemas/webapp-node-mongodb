@@ -23,7 +23,8 @@ app.use(express.urlencoded({extended: false}))
 app.use(cookieParser())
 app.use(session({secret: 'globomantics'}))
 
-require('./src/config/passport.js')(app)
+import passportConfig from './src/config/passport.js'
+passportConfig(app)
 
 // -----------------------------------------------------
 app.set('views', './src/views')
