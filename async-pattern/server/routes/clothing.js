@@ -7,29 +7,27 @@ const router = express.Router();
 router.route('/')
   .get(function(req, res) {
 
-    getClothingData((err, data) => {
+    getClothingData()
+      .then((data) => {
+        console.log('Returning clothing data')
+        res.send(data)
+      })
+      .catch((err) => console.log(err))
+      .finally(() => console.log('Doing more work'))
+  });
+
+function getClothingData() {
+  return new Promise((resolve, reject) => {
+    fs.readFile(datafile, 'utf8', (err, data) => {
       if (err) {
-        console.log(err);
+        reject(err);
       }
       else {
-        console.log('Returning clothing data');
-        res.send(data);
+        let clothingData = JSON.parse(data);
+        resolve(clothingData);
       }
     });
-
-    console.log('Doing more work');
-  });
-
-function getClothingData(callback) {
-  fs.readFile(datafile, 'utf8', (err, data) => {
-    if (err) {
-      callback(err, null);
-    }
-    else {
-      let clothingData = JSON.parse(data);
-      callback(null, clothingData);
-    }
-  });
+  })
 }  
 
 export default router
