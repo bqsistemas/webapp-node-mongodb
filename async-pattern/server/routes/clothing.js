@@ -11,10 +11,15 @@ const router = express.Router();
 router.route('/')
   .get(async function(req, res) {
 
-    const rawData = await getClothingData(datafile)
-
-    res.send(rawData)
-
+    try{
+      const rawData = await getClothingData(datafile)
+      debug('Returning clothing data')
+      res.send(rawData)
+    }catch{
+      res.status(500).send(err)
+    }finally{
+      debug('Finish get clothes')
+    }
     /* getClothingData(datafile)
       .then((data) => {
         debug('Returning clothing data')
