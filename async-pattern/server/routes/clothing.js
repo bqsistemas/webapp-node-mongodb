@@ -1,5 +1,8 @@
 import express from 'express'
 import fs from 'fs'
+import createDebug  from 'debug'
+const debug = createDebug('app:routes:clothing')
+
 const datafile = 'server/data/clothing.json';
 const router = express.Router();
 
@@ -9,11 +12,13 @@ router.route('/')
 
     getClothingData()
       .then((data) => {
-        console.log('Returning clothing data')
+        debug('Returning clothing data')
         res.send(data)
       })
-      .catch((err) => console.log(err))
-      .finally(() => console.log('Doing more work'))
+      .catch((err) => res.status(500).send(err))
+      .finally(() => debug('Finish get clothes'))
+
+      debug('Doing more work')
   });
 
 function getClothingData() {
