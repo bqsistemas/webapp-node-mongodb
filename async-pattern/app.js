@@ -6,6 +6,17 @@ import bodyParser from 'body-parser'
 import createDebug  from 'debug'
 const debug = createDebug('app')
 
+// events
+import DataMonitor from './server/DataMonitor.js'
+let dataMonitor = new DataMonitor()
+
+dataMonitor.on('dataAdded', (item) => {
+  debug(`1 - New data was added: ${item}`)
+})
+dataMonitor.on('dataAdded', (item) => {
+  setImmediate(() => debug(`2 - New data was added: ${item}`))
+})
+
 // routes
 import clothing from './server/routes/clothing.js'
 import errors from './server/routes/errors.js'
@@ -19,7 +30,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.resolve('dist')));
 
-app.use('/api/clothing', clothing);
+app.use('/api/clothing', clothing(dataMonitor));
 app.use('/api/errors', errors);
 app.get('*', function(req, res) {
   res.sendFile(path.resolve('dist/index.html'));
